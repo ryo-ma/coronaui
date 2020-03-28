@@ -40,6 +40,10 @@ Move down a line
 Move up a line
 * <kbd>q</kbd> / <kbd>CTRL+C</kbd>
 Quit
+* <kbd>c</kbd>
+Copy JSON data
+* <kbd>t</kbd>
+Share to twitter
 * <kbd>CTRL+D</kbd>
 Move down 5 lines
 * <kbd>CTRL+U</kbd>
