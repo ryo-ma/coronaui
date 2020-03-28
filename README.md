@@ -4,12 +4,14 @@
 
 🦠 coronaui - Terminal UI Client for COVID-19 information.
 
-<img src="https://user-images.githubusercontent.com/6661165/77730848-fba1e680-7044-11ea-97f1-538a9df0e8c7.png" width="1000">
+<img src="https://user-images.githubusercontent.com/6661165/77813273-bf28c600-70ea-11ea-880a-2c77ce1754da.gif" width="1000">
 
 
 # Features
 
 * Check the COVID-19 information
+* Copy the JSON data to clipboard
+* Share the information to twitter
 
 
 # Install

@@ -3,14 +3,10 @@ package lib
 import (
 	"bytes"
 	"encoding/json"
-	//	"fmt"
-	//	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"path"
-	//	"strconv"
-	//	"strings"
 	"text/template"
 )
 
@@ -30,6 +26,14 @@ type Country struct {
 	Critical            int     `json:"critical"`
 	CasesPerOneMission  float32 `json:"casesPerOneMillion"`
 	DeathsPerOneMillion float32 `json:"deathsPerOneMillion"`
+}
+
+func (country *Country) ToJSON() string {
+	jsonCountry, err := json.Marshal(country)
+	if err != nil {
+		panic(err)
+	}
+	return bytes.NewBuffer(jsonCountry).String()
 }
 
 func (country *Country) String() string {
@@ -55,14 +59,6 @@ func (country *Country) String() string {
 	}
 	return doc.String()
 }
-
-//func (coronaData *CoronaData) Draw(writer io.Writer) error {
-//	for _, item := range *coronaData.Countries {
-//		starText := " ⭐️ " + strconv.Itoa(item.GetStars())
-//		fmt.Fprintf(writer, "%-10.10s\033[32m%s\033[0m\n", starText, item.GetRepositoryName())
-//	}
-//	return nil
-//}
 
 func NewClient() (*Client, error) {
 	baseURL, err := url.Parse("https://corona.lmao.ninja/")

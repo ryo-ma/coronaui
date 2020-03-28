@@ -50,36 +50,18 @@ func main() {
 	if err := g.SetKeybinding(countryPanel.ViewName, 'q', gocui.ModNone, quit); err != nil {
 		log.Panicln(err)
 	}
-	if err := g.SetKeybinding(textPanel.ViewName, 'q', gocui.ModNone, exit); err != nil {
-		log.Panicln(err)
-	}
-	if err := g.SetKeybinding(textPanel.ViewName, 'x', gocui.ModNone, exit); err != nil {
-		log.Panicln(err)
-	}
 	if err := g.SetKeybinding(countryPanel.ViewName, 'k', gocui.ModNone, cursorMovement(-1)); err != nil {
 		log.Panicln(err)
 	}
 	if err := g.SetKeybinding(countryPanel.ViewName, 'j', gocui.ModNone, cursorMovement(1)); err != nil {
 		log.Panicln(err)
 	}
-	if err := g.SetKeybinding(textPanel.ViewName, 'k', gocui.ModNone, cursorMovement(-1)); err != nil {
-		log.Panicln(err)
-	}
-	if err := g.SetKeybinding(textPanel.ViewName, 'j', gocui.ModNone, cursorMovement(1)); err != nil {
-		log.Panicln(err)
-	}
 	if err := g.SetKeybinding(countryPanel.ViewName, 'c', gocui.ModNone, copyLineData); err != nil {
 		log.Panicln(err)
 	}
-	if err := g.SetKeybinding(textPanel.ViewName, 'c', gocui.ModNone, copyLineData); err != nil {
+	if err := g.SetKeybinding(countryPanel.ViewName, 't', gocui.ModNone, openTwitter); err != nil {
 		log.Panicln(err)
 	}
-	// if err := g.SetKeybinding(countryPanel.ViewName, 'o', gocui.ModNone, openBrowser); err != nil {
-	// 	log.Panicln(err)
-	// }
-	//if err := g.SetKeybinding(textPanel.ViewName, 'o', gocui.ModNone, openBrowser); err != nil {
-	//	log.Panicln(err)
-	//}
 	if err := g.SetKeybinding("", gocui.KeyCtrlU, gocui.ModNone, cursorMovement(-5)); err != nil {
 		log.Panicln(err)
 	}
@@ -130,24 +112,23 @@ func cursorMovement(d int) func(g *gocui.Gui, v *gocui.View) error {
 }
 
 func copyLineData(g *gocui.Gui, _ *gocui.View) error {
-	//yOffset, yCurrent, _ := cursor.FindPosition(g, countryPanel.ViewName)
-	//currentItem := countryPanel.Result.Items[yCurrent+yOffset]
+	yOffset, yCurrent, _ := cursor.FindPosition(g, countryPanel.ViewName)
+	currentCountry := countryPanel.Countries[yCurrent+yOffset]
 
-	err := clipboard.WriteAll("")
+	err := clipboard.WriteAll(currentCountry.ToJSON())
 	if err != nil {
-		statusPanel.DrawText(g, "Failed to copy. Please copy \033[32m \033[0m")
+		statusPanel.DrawText(g, "Failed to copy. Please copy \033[32m"+currentCountry.ToJSON()+"033[0m")
 		return nil
 	}
 
-	statusPanel.DrawText(g, "Copied successfully! \033[32m \033[0m")
+	statusPanel.DrawText(g, "\033[32mCopied successfully JSON data!\033[0m")
 	return nil
 }
 
-func openBrowser(g *gocui.Gui, _ *gocui.View) error {
-	//yOffset, yCurrent, _ := cursor.FindPosition(g, countryPanel.ViewName)
-	//currentItem := countryPanel.Result.Items[yCurrent+yOffset]
-	//url := currentItem.GetcountryURL()
-	url := ""
+func openTwitter(g *gocui.Gui, _ *gocui.View) error {
+	yOffset, yCurrent, _ := cursor.FindPosition(g, countryPanel.ViewName)
+	currentCountry := countryPanel.Countries[yCurrent+yOffset]
+	url := "http://twitter.com/share?url=https://github.com/ryo-ma/coronaui&text=COVID-19 Information" + currentCountry.String() + "&hashtags=coronaui"
 
 	var err error
 
@@ -162,9 +143,9 @@ func openBrowser(g *gocui.Gui, _ *gocui.View) error {
 		statusPanel.DrawText(g, "Failed to open URL. Unsupported platform.")
 	}
 	if err != nil {
-		statusPanel.DrawText(g, "Failed to open URL.")
+		statusPanel.DrawText(g, "Failed to open Twitter.")
 	}
-	statusPanel.DrawText(g, "Success to open URL. "+url)
+	statusPanel.DrawText(g, "\033[32mSuccess to open Twitter.\033[0m")
 	return nil
 
 }
